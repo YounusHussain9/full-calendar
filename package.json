@@ -18,7 +18,7 @@
     "@fullcalendar/timegrid": "^6.1.8",
     "@fullcalendar/timeline": "^6.1.8",
     "autoprefixer": "10.4.15",
-    "bootstrap": "^5.3.2",
+    "bootstrap": "^5.3.1",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "i": "^0.3.7",

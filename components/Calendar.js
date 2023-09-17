@@ -99,18 +99,14 @@ console.log(popoverOpen,draggedEventRef.current == info.event.id)
     setCurrentView(view);
   };
 
-  console.log({currentView})
   return (
     <>
       <div>
        <div>
-       <select name="view-toggle" id="view-toggle">
-  <option value="Week View" onClick={()=>setCurrentView('timeGridWeek')}>Week View</option>
-  <option value="Month View" onClick={()=>setCurrentView('dayGridMonth')}>Month View</option>
-</select>
+     
        </div>
         <FullCalendar
-          initialView={currentView}
+          initialView={`dayGridMonth`}
           plugins={[
             dayGridPlugin,
             interactionPlugin,
