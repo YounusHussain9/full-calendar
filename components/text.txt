@@ -1,11 +1,31 @@
-import React, { useState, useRef } from "react";
+<Popover
+        placement="right"
+        isOpen={popoverOpen}
+        target={popoverTargetRef.current}
+        toggle={() => setPopoverOpen(!popoverOpen)}
+      >
+        <PopoverHeader>Event Details</PopoverHeader>
+        <PopoverBody>
+          <div>
+            <h5>{candidateObject.title}</h5>
+            <p>@{candidateObject.location}</p>
+          </div>
+        </PopoverBody>
+      </Popover>
+
+
+
+
+
+
+
+      import React, { useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
-
 const eventArray = [
   {
     id: 1,
@@ -48,65 +68,43 @@ const eventArray = [
     location: "New York",
   },
 ];
-
 const Calendar = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverContent, setPopoverContent] = useState("");
-  const [currentView, setCurrentView] = useState('dayGridMonth');
-
+  const [selectedEventId, setSelectedEventId] = useState(null);
   const [candidateObject, setCandidateObject] = useState({
-    id:'',
+    id: "",
     title: "",
     startTime: "",
     endTime: "",
     location: "",
   });
   const popoverTargetRef = useRef(null);
-  const draggedEventRef = useRef(null);
+  const EventIdRef = useRef(null);
 
   const handleEventClick = (info) => {
     const cell = info.el.closest(".fc-daygrid-day");
     popoverTargetRef.current = cell;
-    draggedEventRef.current = info.event.id
     setCandidateObject({
-      id:info.event.id,
+      id: info.event.id,
       title: info.event.title,
       startTime: info.event.start,
       endTime: info.event.end,
       location: info.event.extendedProps.location,
     });
-if(info.event.id === draggedEventRef.current ){
-    setPopoverOpen(true);
-}
-console.log(popoverOpen,draggedEventRef.current == info.event.id)
 
-
-  };
-
-  const getPopoverPosition = () => {
-    if (!popoverTargetRef.current) {
-      return { top: 0, left: 0 };
+    if(info.event.id === candidateObject.id){
+  setPopoverOpen(!popoverOpen)
     }
-
-    const rect = popoverTargetRef.current.getBoundingClientRect();
-    return {
-      top: rect.top + window.scrollY + rect.height, // Adjust as needed
-      left: rect.left + window.scrollX, // Adjust as needed
-    };
   };
 
-  const changeView = (view) => {
-    setCurrentView(view);
-  };
-
+  console.log({popoverOpen})
+  console.log(selectedEventId, candidateObject.id);
   return (
     <>
       <div>
-       <div>
-     
-       </div>
         <FullCalendar
-          initialView={`dayGridMonth`}
+          initialView="dayGridMonth"
           plugins={[
             dayGridPlugin,
             interactionPlugin,
@@ -115,7 +113,8 @@ console.log(popoverOpen,draggedEventRef.current == info.event.id)
           ]}
           events={eventArray}
           eventClick={handleEventClick}
-          dayMaxEventRows={3}
+          // dayMaxEventRows={3}
+          dayMaxEvents={3}
           eventTimeFormat={{
             hour: "2-digit",
             minute: "2-digit",
@@ -123,7 +122,7 @@ console.log(popoverOpen,draggedEventRef.current == info.event.id)
           }}
           headerToolbar={{
             left: "prev,title,next",
-            center: "",
+            center: "title",
             right: "dayGridMonth,timeGridWeek",
           }}
           titleFormat={{ month: "short" }}
@@ -131,11 +130,10 @@ console.log(popoverOpen,draggedEventRef.current == info.event.id)
         />
       </div>
       <Popover
-        placement="right"
+        placement="top"
         isOpen={popoverOpen}
         target={popoverTargetRef.current}
-        position={getPopoverPosition()}
-      >
+    >
         <PopoverHeader>Event Details</PopoverHeader>
         <PopoverBody>
           <div>
@@ -147,5 +145,4 @@ console.log(popoverOpen,draggedEventRef.current == info.event.id)
     </>
   );
 };
-
 export default Calendar;
